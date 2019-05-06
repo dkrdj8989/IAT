@@ -106,6 +106,27 @@ if( isset($_REQUEST['op']) )
 {
 	switch($_REQUEST['op'])
 	{
+		case 'savePhone':
+			if (isset($_REQUEST['phoneNum'])) {
+                $dsn = "mysql:host=localhost";
+                try {
+                    $pdo = new PDO($dsn, "IATexp555","myIAT");
+                }
+                catch(PDOException $e) {
+                    echo 'ERROR: ' . $e->getMessage();
+                    break;
+                }
+
+                $dsn = "mysql:host=localhost";
+                $pdo = new PDO($dsn, "IATexp555","myIAT");
+                $pdo->query("USE `IAT555`;");
+
+                $sub = isset( $_REQUEST['subject'] ) ? $_REQUEST['subject'] : 'unknown2' ; //Subject Identifier
+				$num = $_REQUEST['phoneNum'];
+                $queryinsert = $pdo->prepare("INSERT INTO Phone(Num, User) VALUES ('$num','$sub');");
+                $queryinsert->execute();
+			}
+			break;
 		case 'exists':
 			if( isset($_REQUEST['template']) )
 			{		
@@ -512,9 +533,8 @@ if( isset($_REQUEST['op']) )
 						$dataj = $_POST['dataj'];
 						$errors = $_POST['errors'];
 						$mseconds = $_POST['mseconds'];
-						
-						
-						$sqltemplateid = $pdo->query("select * from Template where TemplateName='$tempname' Order By Templateid Desc Limit 0,1")->fetchColumn(); 
+
+						$sqltemplateid = $pdo->query("select * from Template where TemplateName='$tempname' Order By Templateid Desc Limit 0,1")->fetchColumn();
 						$queryinsert = $pdo->prepare("INSERT INTO Result(Templateid,TemplateName,Blocki,Trialj,Category,ItemIndex,Errors,Mseconds,User) VALUES ('$sqltemplateid','$tempname','$datai','$dataj','$category','$catindex','$errors','$mseconds','$sub');");
 						$queryinsert->execute();
 						}
@@ -532,7 +552,7 @@ if( isset($_REQUEST['op']) )
     						//error_log(print_r("The file $filename exists", TRUE));
 						} else 
 							{
-    						echo "The file $filename does not exist";
+//    						echo "The file $filename does not exist";
     						//error_log(print_r("The file $filename does not exist", TRUE));
 							$dsn = "mysql:host=localhost";
 							try {

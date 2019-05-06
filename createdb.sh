@@ -42,7 +42,12 @@ T5="CREATE  TABLE IAT555.Category_has_item (
   				Category_CategoryId INT NOT NULL ,
   				Item_ItemId INT NOT NULL ,
   				PRIMARY KEY (Category_CategoryId, Item_ItemId)) ENGINE = InnoDB;"
-T6="CREATE  TABLE IF NOT EXISTS IAT555.Result (
+T6="CREATE  TABLE IAT555.Phone (
+                Phoneid INT NOT NULL AUTO_INCREMENT ,
+                Num VARCHAR(45) NOT NULL ,
+                User VARCHAR(45) NOT NULL ,
+                PRIMARY KEY (Phoneid) ) ENGINE = InnoDB;"
+T7="CREATE  TABLE IF NOT EXISTS IAT555.Result (
   				ResultId INT NOT NULL AUTO_INCREMENT,
   				TemplateId INT NOT NULL ,
   				TemplateName TEXT NULL ,
@@ -55,9 +60,7 @@ T6="CREATE  TABLE IF NOT EXISTS IAT555.Result (
   				TimeStamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP  ,
   				User VARCHAR(45) NULL ,
   				PRIMARY KEY (ResultId) )ENGINE = InnoDB;"
-
-
-SQL="${Q1}${Q2}${Q3}${Q4}${Q5}${T1}${T2}${T3}${T4}${T5}${T6}"
+SQL="${Q1}${Q2}${Q3}${Q4}${Q5}${T1}${T2}${T3}${T4}${T5}${T6}${T7}"
 $MYSQL -uroot -p -e "$SQL"
 
 echo "Database and tables created.  Success!"
