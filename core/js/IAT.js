@@ -102,14 +102,14 @@ function startIAT()
 	// make the target or association words green
 	if (Math.random() < 0.5)
 	{
-		openA = "<font color=green>";
+		openA = "<font color=#006400 style='font-weight: 500'>";
 		closeA = "</font>";
 		open1 = "";
 		close1 = "";
 	}
 	else
 	{		
-		open1 = "<font color=green>";
+		open1 = "<font color=#006400 style='font-weight: 500'>";
 		close1 = "</font>";
 		openA = "";
 		closeA = "";
@@ -182,18 +182,18 @@ function initRounds()
             case 0:
             case 4:
                 stype = "target";
-                numrounds = 20;
+                numrounds = 5;
                 break;
             case 1:    
                 stype = "association";
-                numrounds = 20;
+                numrounds = 5;
                 break;
             case 2:
             case 3:
             case 5:
             case 6:
                 stype = "both";
-                numrounds = 40;
+                numrounds = 10;
                 break;
             
         }
@@ -268,9 +268,38 @@ function initRounds()
     return roundArray;
 }
 
+var phoneForm =
+	"<div style='text-align:center;padding:20px'>" +
+		'<div>' +
+			'<p>실험이 종료되었습니다. 참여해주셔서 감사합니다.</p><h3>[비밀보장과 경품]</h3>' +
+			'<p>해당 실험과 척도를 통한 결과와 개인정보는 모두 연구 이외의 목적에 사용되지 않으며 외부로 유출되지 않을 것입니다.</p><p>또한 모든 연구가 끝난 즉시 개인정보는 폐기될 것입니다.<br>' +
+			'  참가에 대한 감사로 추첨을 통해 경품을 증정할 것이니 이를 원하면 휴대폰 번호를 입력해 주시기 바랍니다. 휴대폰 번호 역시 추첨과 경품 전달이 끝난 후 폐기될 것입니다.</p>' +
+		'</div>' +
+		'<form id="form-phone">' +
+			'<input id="phone" type="number" name="phone-num" value="" minlength="11" required/>' +
+			'<button id="submit-phone" type="submit">제출</button>' +
+		'</form></div>';
+
+
+
+$(document).on('submit', '#form-phone', function (e) {
+    var phoneNum = $('#phone').val().toString();
+    console.log(phoneNum.length);
+    e.preventDefault();
+    if (phoneNum.length < 11) {
+    	alert('번호가 올바르지 않습니다');
+	} else {
+        $.post("core/fileManager.php", { 'op':'savePhone', 'subject': sub, 'phoneNum': phoneNum });
+        window.location.href = '/end.php'
+    }
+});
+// $(document).on("click","#submit-phone",function(e) {
+//
+// });
+
 // insert instruction text based on stage in IAT
 function instructionPage()
-{	
+{
 	switch (session)
     {
 		case 0:
@@ -301,7 +330,7 @@ function instructionPage()
 		$("#left_cat").html("");
 		$("#right_cat").html("");
 		$("#exp_instruct").html("<img src='core/spinner.gif'>");
-		$.post("core/fileManager.php", { 'op':'checkdb', 'template':template.name }, 
+		$.post("core/fileManager.php", { 'op':'checkdb', 'template':template.name },
  			function(checkdb) {
 				if(checkdb == "success")
 				{
@@ -318,13 +347,7 @@ function instructionPage()
 		}
 		else
 		{
-		    resulttext = "<div style='text-align:center;padding:20px'>" +
-                '<form><div><p>실험이 종료되었습니다. 참여해주셔서 감사합니다.</p><h3>[비밀보장과 경품]</h3>' +
-                '<p>해당 실험과 척도를 통한 결과와 개인정보는 모두 연구 이외의 목적에 사용되지 않으며 외부로 유출되지 않을 것입니다.</p><p>또한 모든 연구가 끝난 즉시 개인정보는 폐기될 것입니다.<br>' +
-                '  참가에 대한 감사로 추첨을 통해 경품을 증정할 것이니 이를 원하면 휴대폰 번호를 입력해 주시기 바랍니다. 휴대폰 번호 역시 추첨과 경품 전달이 끝난 후 폐기될 것입니다.</p><input type="number" value=""/></div>' +
-                '<button type="submit">제출</button>'
-            '</form>'
-				+"</div>";
+		    resulttext = phoneForm;
 		    $("#picture_frame").html(resulttext);
 		}
 	}
@@ -388,7 +411,7 @@ function calculateIAT()
 	else if (Math.abs(tvalue) > 1.99) { severity = " <b>a little more</b> than "; }
 	else if (Math.abs(tvalue) > 1.66) { severity = " <b>just slightly more</b> than "; }
 	else { severity = ""; }
-	
+
 	// put together feedback based on direction & magnitude
 	if (tvalue < 0 && severity != "")
     { 
@@ -397,13 +420,7 @@ function calculateIAT()
         // resulttext += "you associate "+openA+template.catA.label+closeA+" with "+open1+template.cat1.label+close1;
         // resulttext += " and "+openA+template.catB.label+closeA+" with "+open1+template.cat2.label+close1+".</div>";
         // resulttext += "<div>incompatible: "+incompatible+" ("+(ivar/39)+"); compatible: "+compatible+" ("+(cvar/39)+"); tvalue: "+tvalue+"</div>";
-        resulttext = "<div style='text-align:center;padding:20px'>" +
-            '<form><div><p>실험이 종료되었습니다. 참여해주셔서 감사합니다.</p><h3>[비밀보장과 경품]</h3>' +
-            '<p>해당 실험과 척도를 통한 결과와 개인정보는 모두 연구 이외의 목적에 사용되지 않으며 외부로 유출되지 않을 것입니다.</p><p>또한 모든 연구가 끝난 즉시 개인정보는 폐기될 것입니다.<br>' +
-            '  참가에 대한 감사로 추첨을 통해 경품을 증정할 것이니 이를 원하면 휴대폰 번호를 입력해 주시기 바랍니다. 휴대폰 번호 역시 추첨과 경품 전달이 끝난 후 폐기될 것입니다.</p><input type="number" value=""/></div>' +
-            '<button type="submit">제출</button>'
-        '</form>'
-        +"</div>";
+        resulttext = phoneForm;
     }
     else if (tvalue > 0 && severity != "")
     { 
@@ -412,13 +429,7 @@ function calculateIAT()
         // resulttext += "you associate "+openA+template.catB.label+closeA+" with "+open1+template.cat1.label+close1;
         // resulttext += " and "+openA+template.catA.label+closeA+" with "+open1+template.cat2.label+close1+".</div>";
         // resulttext += "<div>incompatible: "+incompatible+" ("+(ivar/39)+"); compatible: "+compatible+" ("+(cvar/39)+"); tvalue: "+tvalue+"</div>";
-        resulttext = "<div style='text-align:center;padding:20px'>" +
-                '<form><div><p>실험이 종료되었습니다. 참여해주셔서 감사합니다.</p><h3>[비밀보장과 경품]</h3>' +
-                '<p>해당 실험과 척도를 통한 결과와 개인정보는 모두 연구 이외의 목적에 사용되지 않으며 외부로 유출되지 않을 것입니다.</p><p>또한 모든 연구가 끝난 즉시 개인정보는 폐기될 것입니다.<br>' +
-                '  참가에 대한 감사로 추첨을 통해 경품을 증정할 것이니 이를 원하면 휴대폰 번호를 입력해 주시기 바랍니다. 휴대폰 번호 역시 추첨과 경품 전달이 끝난 후 폐기될 것입니다.</p><input type="number" value=""/></div>' +
-                '<button type="submit">제출</button>'
-            '</form>'
-				+"</div>";
+        resulttext = phoneForm;
     }
     else
     { 
@@ -426,13 +437,7 @@ function calculateIAT()
         // resulttext += " with "+open1+template.cat1.label+close1+" any more or less than you associate ";
         // resulttext += openA+template.catB.label+closeA+" with "+open1+template.cat1.label+close1+".</div>";
         // resulttext += "<div>incompatible: "+incompatible+" ("+(ivar/39)+"); compatible: "+compatible+" ("+(cvar/39)+"); tvalue: "+tvalue+"</div>";
-        resulttext = "<div style='text-align:center;padding:20px'>" +
-                '<form><div><p>실험이 종료되었습니다. 참여해주셔서 감사합니다.</p><h3>[비밀보장과 경품]</h3>' +
-                '<p>해당 실험과 척도를 통한 결과와 개인정보는 모두 연구 이외의 목적에 사용되지 않으며 외부로 유출되지 않을 것입니다.</p><p>또한 모든 연구가 끝난 즉시 개인정보는 폐기될 것입니다.<br>' +
-                '  참가에 대한 감사로 추첨을 통해 경품을 증정할 것이니 이를 원하면 휴대폰 번호를 입력해 주시기 바랍니다. 휴대폰 번호 역시 추첨과 경품 전달이 끝난 후 폐기될 것입니다.</p><input type="number" value=""/></div>' +
-                '<button type="submit">제출</button>'
-            '</form>'
-				+"</div>";
+        resulttext = phoneForm;
     }
 	$("#picture_frame").html(resulttext);
 }
@@ -637,7 +642,6 @@ function WriteDatabase()
 // This monitors for keyboard events
 function keyHandler(kEvent)
 {
-	console.log(kEvent);
 	// move from instructions to session on spacebar press
 	var unicode;
 	if (!kEvent) var kEvent = window.event;
