@@ -180,20 +180,23 @@ function initRounds()
         switch (i)
         {
             case 0:
-            case 4:
+            case 2:
                 stype = "target";
-                numrounds = 5;
+                numrounds = 20;
+                break;
+            case 5:
+                stype = "target";
+                numrounds = 20;
                 break;
             case 1:    
                 stype = "association";
-                numrounds = 5;
+                numrounds = 20;
                 break;
-            case 2:
             case 3:
-            case 5:
+            case 4:
             case 6:
                 stype = "both";
-                numrounds = 10;
+                numrounds = 40;
                 break;
             
         }
