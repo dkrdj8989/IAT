@@ -102,14 +102,14 @@ function startIAT()
 	// make the target or association words green
 	if (Math.random() < 0.5)
 	{
-		openA = "<font color=#006400 style='font-weight: 500'>";
+		openA = "<font style='color: rgb(114, 204, 11)'>";
 		closeA = "</font>";
 		open1 = "";
 		close1 = "";
 	}
 	else
 	{		
-		open1 = "<font color=#006400 style='font-weight: 500'>";
+		open1 = "<font style='color: rgb(114, 204, 11)'>";
 		close1 = "</font>";
 		openA = "";
 		closeA = "";
