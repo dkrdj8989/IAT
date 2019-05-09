@@ -198,6 +198,7 @@ function initRounds()
             case 3:
                 stype = "both";
                 numrounds = 40;
+                break;
             case 5:
                 stype = "both";
                 numrounds = 20;
